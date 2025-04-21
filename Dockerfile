@@ -10,8 +10,12 @@ RUN npm install
 # Copy the rest of the app files
 COPY . .
 
+# Copy entrypoint script and make it executable
+COPY docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+
 # Expose port
 EXPOSE 5000
 
-# Start the app
-CMD ["npm", "start"]
+# Set entrypoint
+ENTRYPOINT ["/docker-entrypoint.sh"]
