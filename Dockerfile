@@ -3,6 +3,9 @@ FROM node:16
 # Set working directory
 WORKDIR /app
 
+# Ensure PATH includes npm
+ENV PATH /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install
@@ -10,12 +13,8 @@ RUN npm install
 # Copy the rest of the app files
 COPY . .
 
-# Copy entrypoint script and make it executable
-COPY docker-entrypoint.sh /
-RUN chmod +x /docker-entrypoint.sh
-
 # Expose port
 EXPOSE 5000
 
-# Set entrypoint
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Start the app
+CMD ["npm", "start"]
