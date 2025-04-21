@@ -1,13 +1,19 @@
-const db = require('./db');
+const db = require('../models/db');
 
 const LoginLog = {
-  create: (logData, callback) => {
+  // Using async/await for create
+  create: async (logData) => {
     const { user_id, ip_address } = logData;
     const query = `
       INSERT INTO login_logs (user_id, ip_address)
       VALUES (?, ?)
     `;
-    db.query(query, [user_id, ip_address], callback);
+    try {
+      const [result] = await db.query(query, [user_id, ip_address]);  // Await the query result
+      return result; // Return the result of the insertion (typically the affected rows or inserted ID)
+    } catch (err) {
+      throw new Error('Error creating login log: ' + err.message);
+    }
   },
 };
 

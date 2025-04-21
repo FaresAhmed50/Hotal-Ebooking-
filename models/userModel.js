@@ -1,35 +1,37 @@
-const db = require('./db');
+const db = require('../models/db');
 const bcrypt = require('bcrypt');
 
 const User = {
-  create: (userData) => {
-    return new Promise((resolve, reject) => {
-      const { name, email, password } = userData;
-      bcrypt.hash(password, 10, (err, hashedPassword) => {
-        if (err) return reject(err);
+  // Using async/await to create a new user
+  create: async (userData) => {
+    const { name, email, password } = userData;
+    try {
+      // Hash the password asynchronously
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-        const query = `
-          INSERT INTO users (name, email, password, role, status)
-          VALUES (?, ?, ?, 'user', 'active')
-        `;
+      const query = `
+        INSERT INTO users (name, email, password, role, status)
+        VALUES (?, ?, ?, 'user', 'active')
+      `;
 
-        db.query(query, [name, email, hashedPassword], (err, results) => {
-          if (err) return reject(err);
-          resolve(results);
-        });
-      });
-    });
+      // Insert the user into the database and return the result
+      const [result] = await db.query(query, [name, email, hashedPassword]);
+      return result;
+    } catch (err) {
+      throw new Error('Error creating user: ' + err.message);
+    }
   },
 
-  findByEmail: (email) => {
-    return new Promise((resolve, reject) => {
+  // Using async/await to find a user by email
+  findByEmail: async (email) => {
+    try {
       const query = 'SELECT * FROM users WHERE email = ?';
-      db.query(query, [email], (err, results) => {
-        if (err) return reject(err);
-        if (results.length === 0) return resolve(null); // No user found
-        resolve(results[0]);
-      });
-    });
+      const [results] = await db.query(query, [email]);
+      if (results.length === 0) return null; // No user found
+      return results[0]; // Return the first user
+    } catch (err) {
+      throw new Error('Error fetching user by email: ' + err.message);
+    }
   },
 };
 
