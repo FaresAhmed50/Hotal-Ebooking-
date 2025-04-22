@@ -5,6 +5,14 @@ const dotenv = require('dotenv');
 const User = require('../models/userModel');
 dotenv.config();
 
+const logger = (message, error = null) => {
+  // Custom logging function for debugging purposes
+  console.log(message);
+  if (error) {
+    console.error('Error:', error);
+    console.error('Stack trace:', error.stack);
+  }
+};
 
 exports.register = async (req, res) => {
   try {
@@ -41,7 +49,7 @@ exports.register = async (req, res) => {
     res.status(201).json({ message: 'User registered successfully' });
 
   } catch (err) {
-    console.error('Registration error:', err); // For debugging purposes, ideally use a logger
+    logger('Registration error', err); // Log the error with a custom logger
     res.status(500).json({ message: 'Server error during registration' });
   }
 };
@@ -81,7 +89,7 @@ exports.login = async (req, res) => {
         { expiresIn: process.env.JWT_EXPIRATION || '1h' } // Use configurable JWT expiration
     );
 
-    // Log the login event (You may consider logging the timestamp as well)
+    // Log the login event
     await db.query(
         'INSERT INTO login_logs (user_id, ip_address, login_time) VALUES (?, ?, ?)',
         [user.id, req.ip, new Date()]
@@ -90,8 +98,7 @@ exports.login = async (req, res) => {
     res.json({ token });
 
   } catch (err) {
-    console.error('Login error:', err);
+    logger('Login error', err); // Log the error with a custom logger
     res.status(500).json({ message: 'Server error during login' });
   }
 };
-
