@@ -1,4 +1,4 @@
-// authController.js
+const dotenv = require('dotenv');  // Add this line to import dotenv
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
