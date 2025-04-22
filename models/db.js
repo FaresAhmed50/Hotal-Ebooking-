@@ -11,4 +11,4 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-module.exports = db.promise();
+module.exports = db;
