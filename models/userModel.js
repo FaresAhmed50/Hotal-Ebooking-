@@ -2,35 +2,32 @@ const db = require('../models/db');
 const bcrypt = require('bcrypt');
 
 const User = {
-  // Using async/await to create a new user
+  // Find user by email
+  findByEmail: async (email) => {
+    try {
+      // Ensure you use the promise-based query
+      const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+      return rows[0];  // Return the first result or null if no user found
+    } catch (err) {
+      console.error('Error fetching user by email:', err);  // Handle any errors
+      throw err;  // Rethrow the error for the calling function to handle
+    }
+  },
+
+  // Create a new user
   create: async (userData) => {
     const { name, email, password } = userData;
     try {
-      // Hash the password asynchronously
       const hashedPassword = await bcrypt.hash(password, 10);
-
       const query = `
         INSERT INTO users (name, email, password, role, status)
         VALUES (?, ?, ?, 'user', 'active')
       `;
-
-      // Insert the user into the database and return the result
-      const [result] = await db.query(query, [name, email, hashedPassword]);
-      return result;
+      // Execute the query using promise-based db connection
+      await db.query(query, [name, email, hashedPassword]);
     } catch (err) {
-      throw new Error('Error creating user: ' + err.message);
-    }
-  },
-
-  // Using async/await to find a user by email
-  findByEmail: async (email) => {
-    try {
-      const query = 'SELECT * FROM users WHERE email = ?';
-      const [results] = await db.query(query, [email]);
-      if (results.length === 0) return null; // No user found
-      return results[0]; // Return the first user
-    } catch (err) {
-      throw new Error('Error fetching user by email: ' + err.message);
+      console.error('Error creating user:', err);
+      throw err;
     }
   },
 };

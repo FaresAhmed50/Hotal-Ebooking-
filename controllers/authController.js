@@ -1,18 +1,8 @@
-const db = require('../models/db');
+// authController.js
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
 const User = require('../models/userModel');
 dotenv.config();
-
-const logger = (message, error = null) => {
-  // Custom logging function for debugging purposes
-  console.log(message);
-  if (error) {
-    console.error('Error:', error);
-    console.error('Stack trace:', error.stack);
-  }
-};
 
 exports.register = async (req, res) => {
   try {
@@ -33,7 +23,7 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    // Check if user already exists using User model
+    // Check if user already exists
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: 'Email already registered' });
@@ -42,14 +32,12 @@ exports.register = async (req, res) => {
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user in the database using User model
+    // Create the user in the database
     await User.create({ name, email, password: hashedPassword });
 
-    // Return a success response
     res.status(201).json({ message: 'User registered successfully' });
-
   } catch (err) {
-    logger('Registration error', err); // Log the error with a custom logger
+    console.error('Registration error:', err); // For debugging purposes
     res.status(500).json({ message: 'Server error during registration' });
   }
 };
@@ -64,9 +52,7 @@ exports.login = async (req, res) => {
     }
 
     // Find user by email
-    const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-    const user = users[0];
-
+    const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
@@ -82,11 +68,11 @@ exports.login = async (req, res) => {
       return res.status(403).json({ message: 'Account is banned' });
     }
 
-    // Create JWT token with additional claims (e.g., role)
+    // Create JWT token
     const token = jwt.sign(
         { id: user.id, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn: process.env.JWT_EXPIRATION || '1h' } // Use configurable JWT expiration
+        { expiresIn: process.env.JWT_EXPIRATION || '1h' }
     );
 
     // Log the login event
@@ -96,9 +82,8 @@ exports.login = async (req, res) => {
     );
 
     res.json({ token });
-
   } catch (err) {
-    logger('Login error', err); // Log the error with a custom logger
+    console.error('Login error:', err);
     res.status(500).json({ message: 'Server error during login' });
   }
 };
