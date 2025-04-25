@@ -1,5 +1,4 @@
-CREATE DATABASE
-IF NOT EXISTS hotel_booking;
+CREATE DATABASE IF NOT EXISTS hotel_booking;
 USE hotel_booking;
 
 -- Users Table
