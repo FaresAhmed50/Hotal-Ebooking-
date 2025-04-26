@@ -1,35 +1,33 @@
-const db = require('../models/db');
+const db = require('./db');
 const bcrypt = require('bcrypt');
 
 const User = {
-  // Find user by email
-  findByEmail: async (email) => {
-    try {
-      // Ensure you use the promise-based query
-      const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-      return rows[0];  // Return the first result or null if no user found
-    } catch (err) {
-      console.error('Error fetching user by email:', err);  // Handle any errors
-      throw err;  // Rethrow the error for the calling function to handle
-    }
+  async create({ name, email, password }) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [result] = await db.query(
+      'INSERT INTO users (name, email, password) VALUES (?, ?, ?)',
+      [name, email, hashedPassword]
+    );
+    return result;
   },
 
-  // Create a new user
-  create: async (userData) => {
-    const { name, email, password } = userData;
-    try {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const query = `
-        INSERT INTO users (name, email, password, role, status)
-        VALUES (?, ?, ?, 'user', 'active')
-      `;
-      // Execute the query using promise-based db connection
-      await db.query(query, [name, email, hashedPassword]);
-    } catch (err) {
-      console.error('Error creating user:', err);
-      throw err;
-    }
+  async findByEmail(email) {
+    const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    return rows[0];
   },
+
+  async findById(id) {
+    const [rows] = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+    return rows[0];
+  },
+
+  async updateStatus(id, status) {
+    const [result] = await db.query(
+      'UPDATE users SET status = ? WHERE id = ?',
+      [status, id]
+    );
+    return result;
+  }
 };
 
 module.exports = User;
