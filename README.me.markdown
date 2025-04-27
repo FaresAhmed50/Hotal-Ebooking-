@@ -66,7 +66,7 @@ hotel-booking-backend/
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Mohamedh0/Hotal-Ebooking-.git
    cd hotel-booking-backend
    ```
 
