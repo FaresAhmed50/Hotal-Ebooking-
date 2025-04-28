@@ -1,24 +1,20 @@
 FROM node:16
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
-
-# Ensure PATH includes npm
-ENV PATH /usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the app files
+# Copy application code
 COPY . .
 
-# Expose port
-EXPOSE 5000
+# Generate Prisma client
+RUN npx prisma generate
 
-# Start the app
+# Expose port for the application
+EXPOSE 3000
+
+# Start the application
 CMD ["npm", "start"]
-
-# Healthcheck (optional)
-HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
-  CMD curl --fail http://localhost:5000/ || exit 1

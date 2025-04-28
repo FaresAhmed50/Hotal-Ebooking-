@@ -20,6 +20,12 @@ app.use('/api', bookingRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', paymentRoutes);
 
+
+app.get('/', (req, res) => {
+  res.send('API is running 🚀');
+});
+
+
 // Error handling
 app.use((err, req, res, next) => {
   console.error('Server error:', err.stack);
