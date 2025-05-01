@@ -196,7 +196,7 @@ The database (`hotel_booking`) consists of six tables, defined in `prisma/schema
 
 ## API Endpoints
 
-All endpoints are prefixed with `http://localhost:3000/api`.
+All endpoints are prefixed with `http://localhost:5000/api`.
 
 ### Authentication Routes
 
