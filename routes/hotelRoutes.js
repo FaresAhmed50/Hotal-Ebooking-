@@ -4,8 +4,8 @@ const hotelController = require('../controllers/hotelController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const isAdmin = require('../middlewares/isAdmin');
 
-router.post('/hotels', authMiddleware, isAdmin, hotelController.createHotel);
+router.post('/AddHotels', authMiddleware, isAdmin, hotelController.createHotel);
 router.post('/rooms', authMiddleware, isAdmin, hotelController.createRoom);
-router.get('/hotels', hotelController.getHotels);
+router.get('/getAllHotels', hotelController.getHotels);
 
 module.exports = router;

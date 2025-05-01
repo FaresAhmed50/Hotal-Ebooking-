@@ -341,7 +341,7 @@ GET /api/auth/users/by-email?email=john@example.com
 
 ### Hotel Routes
 
-#### POST `/hotels` (Admin Only)
+#### POST `/AddHotels` (Admin Only)
 Create a new hotel.
 
 **Headers**:
@@ -388,7 +388,7 @@ Create a new room for a hotel.
   { "message": "Room created successfully", "room": { "id": 1, "roomType": "double", ... } }
   ```
 
-#### GET `/hotels`
+#### GET `/getAllHotels`
 Retrieve all hotels with their rooms (public).
 
 **Response**:

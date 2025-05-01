@@ -17,6 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "fileReplacements": [
+              {
+                 "replace": "./src/app/Enviroments/Enviroments.ts",
+                  "with": "./src/app/Enviroments/Enviroments.prod.ts"
+              }
+            ],
             "outputPath": "dist/hotel",
             "index": "src/index.html",
             "browser": "src/main.ts",
