@@ -352,7 +352,7 @@ Create a new hotel.
 {
   "name": "Grand Hotel",
   "location": "123 Main St",
-  "description": "Luxury hotel",
+  "description": "Luxury hotel",  
   "starRating": 5,
   "amenities": "pool, wifi",
   "contactInfo": "info@grandhotel.com"

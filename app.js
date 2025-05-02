@@ -5,10 +5,17 @@ const hotelRoutes = require('./routes/hotelRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-
+const cors = require('cors');
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:4200', // allow your dev frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 
 // Middleware
 app.use(express.json());

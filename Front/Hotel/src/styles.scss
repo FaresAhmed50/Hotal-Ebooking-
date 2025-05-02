@@ -2,3 +2,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&display=swap');
+
+
+:root{
+  --primary: rgba(20, 23, 24, 1);
+  --secondary: rgba(56, 203, 137, 1);
+  --secondary-p: rgba(108, 114, 117, 1);
+  --gray-bg: #878181;
+}
+
+.btn {
+  @apply py-2 px-5 font-semibold rounded-md bg-black text-center text-white  w-full  ;
+}
+
+.custom_count{
+  @apply bg-black  rounded-full text-white text-2xl text-center w-8 h-8;
+}
+
+
+.router_active{
+  @apply text-[--primary] font-bold;
+}
+
+
+
+
